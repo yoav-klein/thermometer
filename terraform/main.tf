@@ -19,16 +19,16 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_iot_thing" "thermostat" {
-  name = "thermostat"
+resource "aws_iot_thing" "thermometer" {
+  name = "thermometer"
 }
 
 resource "aws_iot_certificate" "cert" {
   active = true
 }
 
-resource "aws_iot_policy" "thermostat" {
-  name = "ThermostatConnectAndPublish"
+resource "aws_iot_policy" "thermometer" {
+  name = "ThermometerConnectAndPublish"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -40,7 +40,7 @@ resource "aws_iot_policy" "thermostat" {
           "iot:Connect"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:iot:us-east-1:${data.aws_caller_identity.current.account_id}:client/thermostat"
+        Resource = "arn:aws:iot:us-east-1:${data.aws_caller_identity.current.account_id}:client/thermometer"
       },
       {
         Action = [
@@ -68,7 +68,7 @@ resource "aws_iot_policy" "thermostat" {
 }
 
 resource "aws_iot_policy_attachment" "att" {
-  policy = aws_iot_policy.thermostat.name
+  policy = aws_iot_policy.thermometer.name
   target = aws_iot_certificate.cert.arn
 }
 
